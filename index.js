@@ -1,7 +1,7 @@
 var provinceList = ["内蒙古","辽宁","吉林","黑龙江","上海","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广西","海南","重庆","四川","贵州","云南","陕西","甘肃","青海","宁夏","新疆","北京","天津","河北","山西","广东","西藏"];
 var divisionList = ["文科","理科","综合"];
 var batchList = ["本科一批","本科批","本科一批A段","平行录取一段","本科二批","本科一批B段","零志愿批次","平行录取二段","专科批","本科二批A段","本科二批B段","平行录取三段","本科三批","本科二批C段","本科三批A段","本科批A段","国家专项计划本科批","地方专项计划本科批","本科提前批","普通类提前批","专科提前批","本科综合评价批","高校专项计划本科批","本科批B段"];
-var data=[],searchBy,userID;
+var data=[],searchBy,userID,coffeeClicked=false;
 var pingpath;
 function $(id){return document.getElementById(id)}
 function getCookie(name){
@@ -46,7 +46,7 @@ function query(){
 	searchBy = document.forms[0].searchBy.value;
 	$("spanSearchBy").innerHTML = searchBy=="s"?"分数":"位次";
 	var baseURL = "http://cdn.sou.ac.cn/release/CEE";
-	var url = baseURL+"/"+$("provinceSelector").value+"/"+document.forms[0].division.value+"/"+$("percentSelector").value+"/"+$("scoreBox").value+"/"+document.forms[0].searchBy.value+"/"+($("coffee").style.display=="none"?"data.js":"list.js");
+	var url = baseURL+"/"+$("provinceSelector").value+"/"+document.forms[0].division.value+"/"+$("percentSelector").value+"/"+$("scoreBox").value+"/"+document.forms[0].searchBy.value+"/"+(coffeeClicked?"list.js":"data.js");
 	fetch(url).then(function(response) {
 		return response.json();
 	}).then(function(d) {
