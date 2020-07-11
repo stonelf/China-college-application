@@ -1,104 +1,280 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<!--
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <base href="http://cdn.sou.ac.cn/" />
--->
-<title>填教授™ - 2020年高考志愿辅助填选</title>
-<script src="index.js"></script>
+    <title>填教授™ - 2020年高考志愿辅助填选</title>
+    <script src="index.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            background: #f3f4f9;
+            line-height: 2;
+            padding: 15px;
+        }
+
+        .btn {
+            background: #09f;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .org {
+            background: #e80;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+     
+        .btn:hover {
+            background: #08e;
+            cursor: pointer;
+        }
+        .org:hover{background: #f90;}
+
+        .table {
+            width: 100%;
+            margin: 15px 0;
+            border-collapse: collapse;
+            border: 1px solid #666
+        }
+        
+        .table tr:nth-child(2n){background: #dae8f7;}
+        .form {
+            margin: 15px;
+        }
+        .fieldset{border:1px solid #999}
+        .form input,
+        .form select {
+            padding: 5px;
+        }
+
+        legend {
+            padding: 10px;
+            font-size: 1em;
+            font-weight: bolder;
+        }
+        .table thead th{white-space: nowrap; text-align: left;padding:0 10px;background: #dae8f7;border:1px solid #666}
+        .table tr td {
+            padding: 5px;border:1px solid #666;
+        }
+        .table tr td:first-child{ white-space: nowrap;   }
+        .form-panel {
+            text-align: center;
+        }
+
+        .copyright {
+            text-align: center;
+        }
+
+        .reg {
+            color: #999;
+            font-size: 14px;
+        }
+
+        ol,
+        ul {
+            padding-left: 30px;
+        padding-right: 10px;
+        }
+
+
+        .mask {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 1198;
+        }
+
+        .maskinfo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 1199;
+            width: 50%;
+            font-size: 0.8rem;
+            background-color: #fff;
+            text-align: center;
+            border-radius: 1rem;
+            transform: translate(-50%, -50%);
+        }
+
+        .maskinfocon {
+            overflow: auto;
+            height: 25rem;
+            padding: 15px;
+        }
+
+        .mask-title {
+            text-align: center;
+            padding: 12px 0
+        }
+
+        .close-mask {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+
+            text-align: center;
+            border-radius: 100%;
+            transform: translateX(-50%);
+        }
+
+        .maskshow {
+            display: none;
+        }
+
+        #tip {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+        }
+        .wrap{width: 85vw;margin:0 auto;background: #fff;padding: 15px;}
+        @media screen and ( max-width: 650px ) {
+            .table tbody tr td{font-size: 0.6rem;padding:2px; }
+            .table tr td:first-child{ white-space: normal;}
+            .maskinfo {width: 90vw;}
+            .maskinfo img{width: 70%;}
+            .maskinfocon{height: 85vh;}
+            .form>span{display: block;text-align: left;margin:10px 0;}
+            .btn{width: 46vw;}
+}
+    </style>
 </head>
-<body onload="init()" style="line-height:2em">
-<br><center style="font-size:2em">填教授™ - 2020年高考志愿辅助填选</center><br>
-<form onsubmit="return false">
-<label for="provinceSelector">省份：<label></label><select id="provinceSelector" onchange="setCookie('province',selectedIndex)"></select>
-&nbsp; &nbsp; 
-<nobr>分科：<input type="radio" value=0 name="division" id="division0" onchange="setCookie('division',value)"><label for="division0">文科</label>
-<input type="radio" value=1 name="division" id="division1" onchange="setCookie('division',value)"><label for="division1">理科</label>
-<input type="radio" value=2 name="division" id="division2" onchange="setCookie('division',value)"><label for="division=2">综合</label></nobr>
-&nbsp; &nbsp; 
-<nobr>
-查询方式：
-<input type=radio value=s name=searchBy id="searchByScore" checked onchange="setCookie('searchBy',value)"">
+<body onload="init()">
+    <div class="maskshow" id="maskshow">
+        <div class="mask"></div>
+        <div class="maskinfo">
+            <h2 class='mask-title'>程序员搬砖不易！</h2>
+            <div class="maskinfocon">
+                <img id="alipayPic" width="300">
+                <img id="coffeePic" width="300" onload="coffeeClicked=true">
+            </div>
+            <div class="close-mask"><img src="http://img.lookcss.com/close.svg"
+                    onclick="$('maskshow').style.display='none';$('tip').style.display='block'" width="32"></div>
+        </div>
+    </div>
+    <section class="wrap">
+    <h1 style="font-size:2em;text-align: center;">填教授™ - 2020年高考志愿辅助填选</h1>
+    <div class="form-panel">
+        <form class="form" onsubmit="return false">
+            <span>
+            <label for="provinceSelector">省份：</label><select id="provinceSelector"
+                    onchange="setCookie('province',selectedIndex)"></select>
+                </span>
+                <span>
+                    分科：<input type="radio" value=0 name="division" id="division0"
+                        onchange="setCookie('division',value)"><label for="division0">文科</label>
+                    <input type="radio" value=1 name="division" id="division1"
+                        onchange="setCookie('division',value)"><label for="division1">理科</label>
+                    <input type="radio" value=2 name="division" id="division2"
+                        onchange="setCookie('division',value)"><label for="division2">综合</label>
+                    </span>
+                <span>
+                    查询方式：
+                    <input type=radio value=s name=searchBy id="searchByScore" checked
+                        onchange="setCookie('searchBy',value)"">
 <label for="searchByScore">按分数</label>
-<input type=radio value=p name=searchBy id="searchByPosition" onchange="setCookie('searchBy',value)"">
+            <input type=radio value=p name=searchBy id="searchByPosition" onchange="setCookie('searchBy',value)"">
 <label for="searchByPosition">按位次</label>
-</nobr>
-&nbsp; &nbsp; 
-<nobr><label for="scoreBox" id="scoreLabel">分数:</label>
-<input id="scoreBox" onchange="setCookie(searchBy=='s'?'score':'position',value)" type="number"></nobr>
-&nbsp; &nbsp; 
-<nobr>
-<label for="percentSelector">上线概率：</label>
-<select id="percentSelector" onchange="setCookie('percent',selectedIndex)">
-	<optgroup  label="比较有挑战">
-	<option value=5>5%</option>
-	<option value=10>10%</option>
-	<option value=15>15%</option>
-	<option value=20>20%</option>
-	<option value=25>25%</option>
-	<option value=30>30%</option>
-	<option value=35>35%</option>
-	</optgroup>
-	<optgroup label="风险中等">
-	<option value=40>40%</option>		
-	<option value=45>45%</option>
-	<option value=50>50%(预测值)</option>
-	<option value=55>55%</option>
-	<option value=60>60%</option>
-	</optgroup>
-	<optgroup label="相对保险">
-	<option value=65>65%</option>		
-	<option value=70>70%</option>
-		<option value=75>75%</option>
-	<option value=80>80%</option>
-	<option value=85>85%</option>
-	<option value=90>90%</option>
-	<option value=95>95%</option>
-		
-	</optgroup>
-	<optgroup  label=概率越大表示越有把握></optgroup>
-</select>
-</nobr>
-&nbsp; &nbsp; 
-<button onclick="query()"> &nbsp; 查 &nbsp; 询 &nbsp; </button>
-<span id="keywordSpan" style="display:none">
-<input id="keywordBox" onchange="setCookie('keyword',value)">
-<button onclick="filter()">过滤</button>	
-</span>
-</form>
-<table border="flat" cellspacing="0">
-	<thead><tr><th width="20%">学校</th><th width="20%">专业</th><th width="10%">批次</th><th width="10%">分科</th><th width="8%">预测<span id="spanSearchBy">分数</span></th><th width="15"></th></tr></thead>
-<tbody id="majorList"></tbody></table>
-<p></p>
-<fieldset style="width:80%">
-<legend>关于填教授™</legend>
-<ul>
-<li>填教授™是一个免费作品，是一个辅助高考考生填写志愿的免费服务</li>
-<li>每年全国有超过2500个高校、超过1500个专业在高考中招生，历年招生数据浩如烟海，全面了解这些招生信息对于任何一个考生和家长来讲都难以达成，因此获取到最正确最有参考价值信息的考生，会在分数之外获得额外的竞争优势，进而影响一生，而更多未能获得有效信息的考生，则可能错失了一个关键的发展机会。</li>
-<li>我们认为影响了社会公平的信息洼地应该被良好的信息服务填平，所有人应该便捷的获得有效的数据和平等的发展机会。因此我们基于历年各高校录取情况的公开信息和统计学，开发了填教授来帮助考生筛选学校和专业</li>
-<li>预测录取分数线的依据全部来自于往年各高校录取情况的公开信息，和市面上其他基于2019年录取分数进行预估的产品的主要区别在于<b>考虑了每个专业录取情况的长期变化趋势和随机抖动,参考过去几年的数据计算出每个专业的录取分数的概率分布</b>。</li>
-<li>由于统计偏差不可避免，填教授只为提供信息辅助考生进行选择，不对预测结果承担任何责任。</li>
-</ul>
-<ol>
-<p>使用说明：</p>
-	<li>选择考生所在省份，分科后，填入高考成绩后，点击查询按钮即可查询到根据往年录取情况有可能考上的学校和专业</li>
-	<li>可以下拉选择不同的上线概率后重新查询，来筛选相对保险(高概率、保底)的专业和相对有挑战(低概率)的专业，</li>
-	<li>对于公布位次的省份，可以选择按照位次来查询筛选专业</li>
-	<li>筛选后页面出现过滤按钮，可以输入感兴趣的学校和专业关键字在结果中进行进一步的筛选。</li>
-	<li>每年招生情况都会发生变化，因此考生在查询后仍需要通过其他途径进一步了解相关专业当年的招生信息</li>
-	<li>搬砖不易，请程序员喝杯咖啡的考生除了增加人品值，可能会获得更多隐藏功能。</li>
-</ol>
+                </span>
+            <span><label for="scoreBox" id="scoreLabel">分数:</label>
+                <input id="scoreBox" onchange="setCookie(searchBy=='s'?'score':'position',value)" type="number"></span>
+            <span>
+                <label for="percentSelector">上线概率：</label>
+                <select id="percentSelector" onchange="setCookie('percent',selectedIndex)">
+                    <optgroup label="比较有挑战">
+                        <option value=5>5%</option>
+                        <option value=10>10%</option>
+                        <option value=15>15%</option>
+                        <option value=20>20%</option>
+                        <option value=25>25%</option>
+                        <option value=30>30%</option>
+                        <option value=35>35%</option>
+                    </optgroup>
+                    <optgroup label="风险中等">
+                        <option value=40>40%</option>
+                        <option value=45>45%</option>
+                        <option value=50>50%(预测值)</option>
+                        <option value=55>55%</option>
+                        <option value=60>60%</option>
+                    </optgroup>
+                    <optgroup label="相对保险">
+                        <option value=65>65%</option>
+                        <option value=70>70%</option>
+                        <option value=75>75%</option>
+                        <option value=80>80%</option>
+                        <option value=85>85%</option>
+                        <option value=90>90%</option>
+                        <option value=95>95%</option>
 
-</fieldset>
+                    </optgroup>
+                    <optgroup label=概率越大表示越有把握></optgroup>
+                </select>
+            </span>
+          
+            <button class="btn" onclick="query()"> &nbsp; 查 &nbsp; 询 &nbsp; </button>
+            <span id="keywordSpan" style="display:none">
+                <input placeholder="请输入过滤关键词" id="keywordBox" onchange="setCookie('keyword',value)">
+                <button class="btn2 org" onclick="filter()">过滤</button>
+            </span>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th  >学校</th>
+                <th  >专业</th>
+                <th  >批次</th>
+                <th  >分科</th>
+                <th  >预测<wbr></wbr><span id="spanSearchBy">分数</span></th>
+                <th width="15" style="display: none;"></th>
+            </tr>
+        </thead>
+        <tbody id="majorList"></tbody>
+    </table>
+    <p></p>
+    <fieldset class="fieldset" style="width:100%">
+        <legend>关于填教授™</legend>
+        <ul>
+            <li>填教授™是一个免费作品，是一个辅助高考考生填写志愿的免费服务</li>
+            <li>每年全国有超过2500个高校、超过1500个专业在高考中招生，历年招生数据浩如烟海，全面了解这些招生信息对于任何一个考生和家长来讲都难以达成，因此获取到最正确最有参考价值信息的考生，会在分数之外获得额外的竞争优势，进而影响一生，而更多未能获得有效信息的考生，则可能错失了一个关键的发展机会。
+            </li>
+            <li>我们认为影响了社会公平的信息洼地应该被良好的信息服务填平，所有人应该便捷的获得有效的数据和平等的发展机会。因此我们基于历年各高校录取情况的公开信息和统计学，开发了填教授来帮助考生筛选学校和专业</li>
+            <li>预测录取分数线的依据全部来自于往年各高校录取情况的公开信息。依据概率学进行预测。</li>
+            <li>由于统计偏差不可避免，填教授只为提供信息辅助考生进行选择，不对预测结果承担任何责任。</li>
+        </ul>
+        <ol>
+            <p>使用说明：</p>
+            <li>选择考生所在省份，分科后，填入高考成绩后，点击查询按钮即可查询到根据往年录取情况有可能考上的学校和专业</li>
+            <li>可以下拉选择不同的上线概率后重新查询，来筛选相对保险(高概率、保底)的专业和相对有挑战(低概率)的专业，</li>
+            <li>对于公布位次的省份，可以选择按照位次来查询筛选专业</li>
+            <li>筛选后页面出现过滤按钮，可以输入感兴趣的学校和专业关键字在结果中进行进一步的筛选。</li>
+            <li>每年招生情况都会发生变化，因此考生在查询后仍需要通过其他途径进一步了解相关专业当年的招生信息</li>
+            <li>搬砖不易，请程序员喝杯咖啡的考生除了增加人品值，可能会获得更多隐藏功能。</li>
+        </ol>
+    </fieldset>
+    <br><br>
+</section>
+    <span id='tip'
+        onclick="style.display='none';$('maskshow').style.display='block';if(!(/(MicroMessenger)|(wechat)/i.test(navigator.userAgent))){$('alipayPic').src='zfb.jpg'};$('coffeePic').src='coffee.jpg';"><img style="vertical-align: text-bottom;" src="https://img.lookcss.com/coffee.svg" width="32" />搬砖不易，请程序员喝杯咖啡吧</span>
 
-<br><br>
-<span onclick="style.display='none';$('coffee').style.display='';if(!(/MicroMessenger/i.test(navigator.userAgent))){$('coffee').firstChild.src='zfb.jpg'};$('coffee').lastChild.src='coffee.jpg';" style="position:fixed;right:10px;bottom:10px;">搬砖不易，请程序员喝杯咖啡吧</span>
-<center style="display:none;" id="coffee"><img onload="window.scrollBy(0,9999)" style="max-width: 90%;"><br><img onload="window.scrollBy(0,9999)" style="max-width: 90%;"></center>
-
-<p><a href="https://wj.qq.com/s2/6684051/a204/">意见/建议/缺陷反馈点这里</a></p>
-<center> ©2020 http://www.professortian.net </center>
-<br><br><img width=0 height=0 id="ping">
+    <div class="copyright"><a href="https://wj.qq.com/s2/6684051/a204/">意见/建议/缺陷反馈点这里</a>
+        <p class="reg"> ©2020 http://www.professortian.net </p>
+    </div>
+    <img width=0 height=0 id="ping">
 </body>
 </html>
