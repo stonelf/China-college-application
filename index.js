@@ -32,7 +32,7 @@ function init(){
 	e=$("percentSelector")
 	e.selectedIndex=getCookie("percent")||9;
 	document.forms[0].division.value = getCookie("division")||0
-	searchBy = document.forms[0].searchBy.value = getCookie("searchBy");
+	searchBy = document.forms[0].search_by.value = getCookie("searchBy");
 	$("scoreBox").value=getCookie(searchBy=="p"?"position":"score")|(searchBy=="p"?"10000":"500");
 	$("scoreBox").maxLength=searchBy=="p"?6:3;
 	userID = getCookie("userID")||Math.round(Math.random()*(2**48)).toString(16);
@@ -43,10 +43,11 @@ function init(){
 function query(){
 	$("majorList").innerHTML="";
 	$("keywordSpan").style.display="none"
-	searchBy = document.forms[0].searchBy.value;
+	searchBy = document.forms[0].search_by.value;
 	$("spanSearchBy").innerHTML = searchBy=="s"?"分数":"位次";
+//	var baseURL = "http://http://stonecdn.baobeihuijia.com/release/CEE";
 	var baseURL = "http://cdn.sou.ac.cn/release/CEE";
-	var url = baseURL+"/"+$("provinceSelector").value+"/"+document.forms[0].division.value+"/"+$("percentSelector").value+"/"+$("scoreBox").value+"/"+document.forms[0].searchBy.value+"/"+(coffeeClicked?"list.js":"data.js");
+	var url = baseURL+"/"+$("provinceSelector").value+"/"+document.forms[0].division.value+"/"+$("percentSelector").value+"/"+$("scoreBox").value+"/"+document.forms[0].search_by.value+"/"+(coffeeClicked?"list.js":"data.js");
 	fetch(url).then(function(response) {
 		return response.json();
 	}).then(function(d) {
