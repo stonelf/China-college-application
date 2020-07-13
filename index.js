@@ -45,8 +45,8 @@ function query(){
 	$("keywordSpan").style.display="none"
 	searchBy = document.forms[0].search_by.value;
 	$("spanSearchBy").innerHTML = searchBy=="s"?"分数":"位次";
-//	var baseURL = "http://http://stonecdn.baobeihuijia.com/release/CEE";
-	var baseURL = "http://cdn.sou.ac.cn/release/CEE";
+	var baseURL = "http://stone.sou.ac.cn/release/CEE";//这个域名直接从cdn透传
+//	var baseURL = "http://cdn.sou.ac.cn/release/CEE";//这个域名经过COS再透传到CDN，COS有长期cache的作用，也有首次访问的时候二次回源的缺陷。
 	var url = baseURL+"/"+$("provinceSelector").value+"/"+document.forms[0].division.value+"/"+$("percentSelector").value+"/"+$("scoreBox").value+"/"+document.forms[0].search_by.value+"/"+(coffeeClicked?"list.js":"data.js");
 	fetch(url).then(function(response) {
 		return response.json();
