@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<base href="http://cdn.sou.ac.cn/" />
     <title>填教授™ - 2020年高考志愿辅助填选</title>
-    <script src="index.js"></script>
+	<base href="http://cdn.sou.ac.cn/" />
+    <script src="./index.js"></script>
     <style>
         * {
             margin: 0;
@@ -154,29 +154,29 @@
         <form class="form" onsubmit="return false">
             <span>
             <label for="provinceSelector">省份：</label><select id="provinceSelector"
-                    onchange="setCookie('province',selectedIndex)"></select>
+                    onchange="store('province',selectedIndex)"></select>
                 </span>
                 <span>
                     分科：<input type="radio" value=0 name="division" id="division0"
-                        onchange="setCookie('division',value)"><label for="division0">文科</label>
+                        onchange="store('division',value)"><label for="division0">文科</label>
                     <input type="radio" value=1 name="division" id="division1"
-                        onchange="setCookie('division',value)"><label for="division1">理科</label>
+                        onchange="store('division',value)"><label for="division1">理科</label>
                     <input type="radio" value=2 name="division" id="division2"
-                        onchange="setCookie('division',value)"><label for="division2">综合</label>
+                        onchange="store('division',value)"><label for="division2">综合</label>
                     </span>
                 <span>
                     查询方式：
                     <input type=radio value=s name=search_by id="searchByScore" checked
-                        onchange="setCookie('searchBy',value)"">
+                        onchange="store('searchBy',value)"">
 <label for="searchByScore">按分数</label>
-            <input type=radio value=p name=search_by id="searchByPosition" onchange="setCookie('searchBy',value)"">
+            <input type=radio value=p name=search_by id="searchByPosition" onchange="store('searchBy',value)"">
 <label for="searchByPosition">按位次</label>
                 </span>
             <span><label for="scoreBox" id="scoreLabel">分数:</label>
-                <input id="scoreBox" onchange="setCookie(searchBy=='s'?'score':'position',value)" type="number"></span>
+                <input id="scoreBox" onchange="store(searchBy=='s'?'score':'position',value)" type="number"></span>
             <span>
                 <label for="percentSelector">上线概率：</label>
-                <select id="percentSelector" onchange="setCookie('percent',selectedIndex)">
+                <select id="percentSelector" onchange="store('percent',selectedIndex)">
                     <optgroup label="比较有挑战">
                         <option value=5>5%</option>
                         <option value=10>10%</option>
@@ -209,7 +209,7 @@
           
             <button class="btn" onclick="query()"> &nbsp; 查 &nbsp; 询 &nbsp; </button>
             <span id="keywordSpan" style="display:none">
-                <input placeholder="请输入过滤关键词" id="keywordBox" onchange="setCookie('keyword',value)">
+                <input placeholder="请输入过滤关键词" id="keywordBox" onchange="store('keyword',value)">
                 <button class="btn2 org" onclick="filter()">过滤</button>
             </span>
         </form>

@@ -4,21 +4,15 @@ var batchList = ["本科一批","本科批","本科一批A段","平行录取一�
 var data=[],searchBy,userID,coffeeClicked=false;
 var pingpath;
 function $(id){return document.getElementById(id)}
-function getCookie(name){
-	var r=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-	if(r.test(document.cookie))
-		return document.cookie.match(r)[2]
-	 else 
-		return null;
+function restore(name){
+	return localStorage.getItem(name)
 }
-function setCookie(name,value){
-	var exp = new Date(); 
-	exp.setTime(exp.getTime() + 864000000);
-	document.cookie = name+"="+value+";expires=" + exp.toGMTString()
+function store(name,value){
+	localStorage.setItem(name,value)
 	if(name == "searchBy"){
 		searchBy = value;
 		$("scoreLabel").innerHTML = value=="s"?"分数":"位次";
-		$("scoreBox").value=getCookie(searchBy=="p"?"position":"score");
+		$("scoreBox").value=restore(searchBy=="p"?"position":"score");
 		$("scoreBox").maxLength= searchBy=="p"?"6":"3"
 	}
 	if(searchBy=="s" && parseInt($("scoreBox").value)>750) $("scoreBox").value=750
@@ -28,15 +22,15 @@ function init(){
 	for(var i=0;i<provinceList.length;i++){
 		e.appendChild(new Option(provinceList[i],i))
 	}
-	e.selectedIndex=getCookie("province")||0;
+	e.selectedIndex=restore("province")||0;
 	e=$("percentSelector")
-	e.selectedIndex=getCookie("percent")||9;
-	document.forms[0].division.value = getCookie("division")||0
-	searchBy = document.forms[0].search_by.value = getCookie("searchBy");
-	$("scoreBox").value=getCookie(searchBy=="p"?"position":"score")|(searchBy=="p"?"10000":"500");
+	e.selectedIndex=restore("percent")||9;
+	document.forms[0].division.value = restore("division")||0
+	searchBy = document.forms[0].search_by.value = restore("searchBy")||'s';
+	$("scoreBox").value=restore(searchBy=="p"?"position":"score")||(searchBy=="p"?"10000":"500");
 	$("scoreBox").maxLength=searchBy=="p"?6:3;
-	userID = getCookie("userID")||Math.round(Math.random()*(2**48)).toString(16);
-	setCookie("userID",userID);
+	userID = restore("userID")||Math.round(Math.random()*(2**48)).toString(16);
+	store("userID",userID);
 	pingpath = "https://service-806yjs9u-1251042283.gz.apigw.tencentcs.com/release/log/"+userID;
 	$("ping").src=pingpath;
 }
