@@ -86,3 +86,6 @@ function filter(){
 		}		
 	}
 }
+function pvcb(pv){
+	$("pageView").innerHTML=pv
+}
