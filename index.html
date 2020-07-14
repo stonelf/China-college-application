@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>填教授™ - 2020年高考志愿辅助填选</title>
-	<base href="http://cdn.sou.ac.cn/" />
-    <script src="./index.js"></script>
+	<base href="//cdn.citpu.net/" />
+    <script src="index.js"></script>
     <style>
         * {
             margin: 0;
@@ -106,14 +106,12 @@
             padding: 12px 0
         }
         .close-mask {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-            text-align: center;
-            border-radius: 100%;
-            transform: translateX(-50%);
+			float:right;
+			color: crimson;
+			font: bold;
+			font-size: 48px;
+			margin-top:-22px;
+			margin-right:12px;
         }
         .maskshow {
             display: none;
@@ -139,13 +137,12 @@
     <div class="maskshow" id="maskshow">
         <div class="mask"></div>
         <div class="maskinfo">
+            <div class="close-mask" onclick="$('maskshow').style.display='none';$('tip').style.display='block'">&#x2297;</div>
             <h2 class='mask-title'>请程序员喝杯咖啡</h2>
             <div class="maskinfocon">
                 <img id="alipayPic" width="300">
                 <img id="coffeePic" width="300" onload="coffeeClicked=true">
             </div>
-            <div class="close-mask"><img src="http://img.lookcss.com/close.svg"
-                    onclick="$('maskshow').style.display='none';$('tip').style.display='block'" width="32"></div>
         </div>
     </div>
     <section class="wrap">
@@ -251,10 +248,10 @@
     <br><br>
 </section>
     <span id='tip'
-        onclick="style.display='none';$('maskshow').style.display='block';if(!(/(MicroMessenger)|(wechat)/i.test(navigator.userAgent))){$('alipayPic').src='zfb.jpg'};$('coffeePic').src='coffee.jpg';"><img style="vertical-align: text-bottom;" src="https://img.lookcss.com/coffee.svg" width="32" />搬砖不易，请程序员喝杯咖啡吧</span>
+        onclick="style.display='none';$('maskshow').style.display='block';if(!(/(MicroMessenger)|(wechat)/i.test(navigator.userAgent))){$('alipayPic').src='zfb.jpg'};$('coffeePic').src='coffee.jpg';"><font color="#820202" size=5>&#9749;</font> 搬砖不易，请程序员喝杯咖啡吧</span>
 
     <div class="copyright"><a href="https://wj.qq.com/s2/6684051/a204/">意见/建议/缺陷反馈点这里</a>
-        <p class="reg"> ©2020 http://www.professortian.net </p>
+        <p class="reg"> ©2020 https://www.professortian.net </p>
     </div>
     <img width=0 height=0 id="ping">
 </body>
