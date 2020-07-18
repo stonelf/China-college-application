@@ -1,0 +1,37 @@
+{
+  "name": "china-college-application",
+  "version": "1.0.0",
+  "license": "AGPL-3.0",
+  "homepage": "https://professortian.net/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stonelf/China-college-application.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stonelf/China-college-application/issues"
+  },
+  "main": "index.html",
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "parcel": "^1.12.4",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.7"
+  },
+  "lint-staged": {
+    "*.{html,md,css,js,json,ts}": [
+      "prettier --write"
+    ]
+  },
+  "scripts": {
+    "test": "lint-staged",
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html --public-url ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm run build"
+    }
+  }
+}

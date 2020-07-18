@@ -1,0 +1,12 @@
+dialog {
+  top: 0;
+  z-index: 1;
+  border: none;
+  background: transparent;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
