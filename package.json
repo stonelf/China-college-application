@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/stonelf/China-college-application/issues"
   },
-  "main": "index.html",
+  "main": "source/index.html",
   "devDependencies": {
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
@@ -25,8 +25,8 @@
   },
   "scripts": {
     "test": "lint-staged",
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html --public-url ."
+    "start": "parcel source/index.html --open",
+    "build": "parcel build source/index.html --public-url ."
   },
   "husky": {
     "hooks": {

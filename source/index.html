@@ -31,7 +31,6 @@
         </select>
       </div>
     </template>
-    <script src="source/components.ts"></script>
 
     <main class="container">
       <h1 class="my-3 text-center">
@@ -40,7 +39,14 @@
       <form class="row">
         <div class="form-group col-12 col-12 col-sm-6 col-md-4">
           <label for="score">分数</label>
-          <input type="number" class="form-control" id="score" name="score" />
+          <input
+            type="number"
+            class="form-control"
+            id="score"
+            name="score"
+            required
+            min="0"
+          />
         </div>
         <div class="form-group col-12 col-12 col-sm-6 col-md-4">
           <label for="percent">上线概率</label>
@@ -81,15 +87,17 @@
           </button>
         </div>
       </form>
-      <div class="form-group" id="keywordSpan" hidden>
-        <input
-          class="form-control"
-          placeholder="请输入过滤关键词"
-          id="keywordBox"
-          onchange="store('keyword',value)"
-        />
-        <button class="btn btn-warning org" onclick="filter()">过滤</button>
-      </div>
+      <form class="row" hidden>
+        <div class="form-group col-12 col-12 col-sm-6 col-md-4">
+          <label for="keywords">关键词</label>
+          <input class="form-control" type="search" id="keywords" />
+        </div>
+        <div
+          class="form-group col-12 col-12 col-sm-6 col-md-4 d-flex align-items-center"
+        >
+          <button type="submit" class="btn btn-warning btn-block">过滤</button>
+        </div>
+      </form>
 
       <table class="table table-striped table-hover">
         <thead>
@@ -114,7 +122,7 @@
           </template>
         </tbody>
       </table>
-      <p></p>
+
       <fieldset class="fieldset" style="width: 100%;">
         <legend>关于填教授™</legend>
         <ul>
@@ -178,8 +186,8 @@
             </button>
           </div>
           <div class="modal-body text-center">
-            <img src="source/images/wechat.jpg" />
-            <img src="source/images/alipay.jpg" />
+            <img src="images/wechat.jpg" />
+            <img src="images/alipay.jpg" />
           </div>
         </div>
       </form>
@@ -190,7 +198,6 @@
         document.querySelector("#pageView").textContent = number;
       }
     </script>
-    <script id="ping"></script>
-    <script src="index.js"></script>
+    <script src="../index.js"></script>
   </body>
 </html>

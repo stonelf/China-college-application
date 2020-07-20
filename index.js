@@ -1,7 +1,10 @@
 import { parseDOM, SelectField, createRenderer } from "./source/components";
 import { province, division, search_by } from "./source/meta.json";
+import { ping, baseURL } from "./source/config";
 
-document.forms[0].prepend(
+const { 0: queryForm, 1: filterForm } = document.forms;
+
+queryForm.prepend(
   parseDOM(`
     ${SelectField({
       className: "col-12 col-12 col-sm-6 col-md-4",
@@ -35,21 +38,24 @@ document.forms[0].prepend(
 `)
 );
 
-const tbody = document.querySelector("#majorList"),
-  userID =
-    localStorage.userID ||
-    (localStorage.userID = Math.round(Math.random() * 2 ** 48).toString(16));
+queryForm.elements.search_by.onchange = ({ target: { value } }) => {
+  const type = search_by[value].slice(1);
 
-const baseURL = "//stone.sou.ac.cn/release/CEE",
-  pingpath =
-    "https://service-806yjs9u-1251042283.gz.apigw.tencentcs.com/release/log/" +
-    userID;
+  document.querySelector('label[for="score"]').textContent = type;
+  document.querySelector("th:nth-child(5)").textContent = `预测${type}`;
+};
 
-document.querySelector("#ping").src = pingpath;
+const tbody = document.querySelector("#majorList");
 
 const TableRow = createRenderer(tbody.firstElementChild.innerHTML);
 
-document.forms[0].addEventListener("submit", async (event) => {
+var data = [];
+
+function renderAll() {
+  tbody.innerHTML = data.map(TableRow).join("");
+}
+
+queryForm.onsubmit = async (event) => {
   event.preventDefault();
 
   const {
@@ -65,55 +71,43 @@ document.forms[0].addEventListener("submit", async (event) => {
     "data.js",
   ].join("/");
 
-  fetch(new URL(path, pingpath));
+  ping(path);
 
-  const response = await fetch(new URL(path, baseURL));
+  const response = await fetch(new URL(path, baseURL) + "");
 
   const list = await response.json(),
     scoreKey = search_by.value + percent.value;
 
-  tbody.innerHTML = list
-    .map(({ [scoreKey]: score, ...rest }) => ({ score, ...rest }))
-    .map(TableRow)
+  data = list.map(({ [scoreKey]: score, ...rest }) => ({ score, ...rest }));
+
+  renderAll();
+
+  filterForm.hidden = false;
+};
+
+filterForm.onsubmit = (event) => {
+  event.preventDefault();
+
+  const {
+    elements: {
+      0: { value },
+    },
+  } = event.target;
+
+  if (!value.trim()) return renderAll();
+
+  const keywords = new RegExp(value.replace(/\s+/g, "|"), "g");
+
+  tbody.innerHTML = data
+    .filter(({ college, major }) => keywords.test(`${college} ${major}`))
+    .map((item) =>
+      TableRow(item).replace(keywords, '<span class="text-danger">$&</span>')
+    )
     .join("");
-});
+};
 
 document.querySelector("#tip").addEventListener("click", () => {
   document.querySelector("dialog").showModal();
 });
 
-var data = [],
-  searchBy;
-
-function $(id) {
-  return document.getElementById(id);
-}
-
-function filter() {
-  var kw = $("keywordBox").value.replace(/\s/, "");
-  if (kw.length < 1) return;
-  var r = new RegExp("(" + kw + ")");
-  var e = $("majorList"),
-    tr,
-    p = $("percentSelector").value;
-  $("majorList").innerHTML = "";
-  for (var i = 0; i < data.length; i++) {
-    if (r.test(data[i].college + data[i].major + data[i].subMajor)) {
-      tr = e.insertRow();
-      tr.insertCell().innerHTML = (
-        data[i].college +
-        "<wbr>" +
-        data[i].branch
-      ).replace(r, "<font color=red>$1</font>");
-      tr.insertCell().innerHTML = (
-        data[i].major +
-        "<wbr>" +
-        data[i].subMajor
-      ).replace(r, "<font color=red>$1</font>");
-      tr.insertCell().innerHTML = data[i].batch;
-      tr.insertCell().innerHTML = data[i].division;
-      tr.insertCell().innerHTML = data[i][searchBy + 50];
-      if (p != 50) tr.insertCell().innerHTML = data[i][searchBy + p];
-    }
-  }
-}
+ping();
