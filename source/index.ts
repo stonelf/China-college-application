@@ -1,7 +1,11 @@
-import { parseDOM, SelectField, createRenderer } from "./source/components";
-import { province, division, search_by } from "./source/meta.json";
-import { ping, baseURL } from "./source/config";
+import { parseDOM, SelectField, createRenderer, Props } from "./components";
+import { province, division, searchBy } from "./meta.json";
+import { Major, ping, baseURL } from "./config";
 
+type MajorProps = Major & Props;
+/**
+ * 渲染表单项
+ */
 const { 0: queryForm, 1: filterForm } = document.forms;
 
 queryForm.prepend(
@@ -31,25 +35,37 @@ queryForm.prepend(
       id: "search_by",
       name: "search_by",
       label: "查询方式",
-      children: Object.entries(search_by)
+      children: Object.entries(searchBy)
         .map(([value, name]) => `<option value="${value}">${name}</option>`)
         .join(""),
     })}
 `)
 );
+/**
+ * 分数、位次切换
+ */
+const tbody = document.querySelector("#majorList");
 
-queryForm.elements.search_by.onchange = ({ target: { value } }) => {
-  const type = search_by[value].slice(1);
+document.querySelector<HTMLSelectElement>("#search_by").onchange = ({
+  target,
+}) => {
+  const { value } = target as HTMLSelectElement;
+  const type = searchBy[value].slice(1);
 
   document.querySelector('label[for="score"]').textContent = type;
   document.querySelector("th:nth-child(5)").textContent = `预测${type}`;
+
+  tbody.innerHTML = "";
 };
+/**
+ * 查询、渲染表格
+ */
+const TableRow = createRenderer(tbody.firstElementChild.innerHTML),
+  lastColumn = document.querySelector<HTMLTableHeaderCellElement>(
+    "th:last-child"
+  );
 
-const tbody = document.querySelector("#majorList");
-
-const TableRow = createRenderer(tbody.firstElementChild.innerHTML);
-
-var data = [];
+var data: MajorProps[] = [];
 
 function renderAll() {
   tbody.innerHTML = data.map(TableRow).join("");
@@ -59,8 +75,9 @@ queryForm.onsubmit = async (event) => {
   event.preventDefault();
 
   const {
+    // @ts-ignore
     elements: { province, division, percent, score, search_by },
-  } = event.target;
+  } = event.target as HTMLFormElement;
 
   const path = [
     province.value,
@@ -71,28 +88,37 @@ queryForm.onsubmit = async (event) => {
     "data.js",
   ].join("/");
 
-  ping(path);
+  // ping(path);
 
   const response = await fetch(new URL(path, baseURL) + "");
 
-  const list = await response.json(),
-    scoreKey = search_by.value + percent.value;
+  const list: MajorProps[] = await response.json(),
+    scoreKey: string = search_by.value + percent.value;
 
-  data = list.map(({ [scoreKey]: score, ...rest }) => ({ score, ...rest }));
+  const two_columns = !scoreKey.endsWith("50");
+
+  data = list.map(({ [scoreKey]: score, s50, p50, ...rest }) => ({
+    score: two_columns ? s50 || p50 : score,
+    position: two_columns ? score : "",
+    ...rest,
+  })) as MajorProps[];
+
+  lastColumn.innerHTML = two_columns
+    ? `预测${searchBy[scoreKey[0]].slice(1)}<br>（${percent.value}%概率过线）`
+    : "";
 
   renderAll();
 
   filterForm.hidden = false;
 };
-
+/**
+ * 筛选表格
+ */
 filterForm.onsubmit = (event) => {
   event.preventDefault();
 
-  const {
-    elements: {
-      0: { value },
-    },
-  } = event.target;
+  const { value } = (event.target as HTMLFormElement)
+    .elements[0] as HTMLInputElement;
 
   if (!value.trim()) return renderAll();
 
@@ -105,9 +131,19 @@ filterForm.onsubmit = (event) => {
     )
     .join("");
 };
-
-document.querySelector("#tip").addEventListener("click", () => {
-  document.querySelector("dialog").showModal();
-});
-
-ping();
+/**
+ * 打开捐款弹框
+ */
+document
+  .querySelector("#tip")
+  .addEventListener("click", () =>
+    document.querySelector("dialog").showModal()
+  );
+/**
+ * 访问统计
+ */
+// ping();
+/**
+ * 加载 PWA 后台线程
+ */
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.ts");

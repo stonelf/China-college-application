@@ -16,7 +16,8 @@
     "lint-staged": "^10.2.11",
     "parcel": "^1.12.4",
     "prettier": "^2.0.5",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "workbox-cli": "^4.3.1"
   },
   "lint-staged": {
     "*.{html,md,css,js,json,ts}": [
@@ -25,8 +26,10 @@
   },
   "scripts": {
     "test": "lint-staged",
-    "start": "parcel source/index.html --open",
-    "build": "parcel build source/index.html --public-url ."
+    "start": "workbox generateSW  &&  parcel source/index.html --open",
+    "pack-dist": "parcel build source/index.html --public-url .",
+    "pack-sw": "rm -f dist/sw.js.map  &&  workbox generateSW",
+    "build": "rm -rf .cache/ dist/  &&  npm run pack-dist  &&  npm run pack-sw"
   },
   "husky": {
     "hooks": {

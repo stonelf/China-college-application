@@ -1,0 +1,20 @@
+{
+  "name": "填教授",
+  "short_name": "填教授",
+  "start_url": "https://professortian.net/",
+  "description": "高考志愿填报助手",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "theme_color": "white",
+  "background_color": "transparent",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ]
+}

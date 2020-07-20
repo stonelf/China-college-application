@@ -4,6 +4,8 @@ export interface Major {
   batch: string;
   division: string;
   score: number;
+  position: number;
+  [key: string]: any;
 }
 
 export const userID =
