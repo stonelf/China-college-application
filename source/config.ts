@@ -5,6 +5,8 @@ export interface Major {
   division: string;
   score: number;
   position: number;
+  dimension?: string;
+  percent?: number;
   [key: string]: any;
 }
 
