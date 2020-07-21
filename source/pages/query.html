@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>数据查询</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="query.css" />
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Object.fromEntries"></script>
+  </head>
+  <body class="bg-light pb-5">
+    <template id="select-field">
+      <div class="form-group ${className}">
+        <label for="${id}">${label}</label>
+        <select class="form-control" id="${id}" name="${name}">
+          ${children}
+        </select>
+      </div>
+    </template>
+
+    <main class="container">
+      <form class="row">
+        <div class="form-group col-6 col-sm-4">
+          <label for="score">分数</label>
+          <input
+            type="number"
+            class="form-control"
+            id="score"
+            name="score"
+            required
+            min="0"
+            autofocus
+          />
+        </div>
+        <div class="form-group col-6 col-sm-4">
+          <label for="percent">上线概率</label>
+          <select class="form-control" id="percent" name="percent">
+            <optgroup label="比较有挑战">
+              <option value="5">5%</option>
+              <option value="10">10%</option>
+              <option value="15">15%</option>
+              <option value="20">20%</option>
+              <option value="25">25%</option>
+              <option value="30">30%</option>
+              <option value="35">35%</option>
+            </optgroup>
+            <optgroup label="风险中等">
+              <option value="40">40%</option>
+              <option value="45">45%</option>
+              <option value="50" selected>50%(预测值)</option>
+              <option value="55">55%</option>
+              <option value="60">60%</option>
+            </optgroup>
+            <optgroup label="相对保险">
+              <option value="65">65%</option>
+              <option value="70">70%</option>
+              <option value="75">75%</option>
+              <option value="80">80%</option>
+              <option value="85">85%</option>
+              <option value="90">90%</option>
+              <option value="95">95%</option>
+            </optgroup>
+            <optgroup label="概率越大表示越有把握"></optgroup>
+          </select>
+        </div>
+        <div class="form-group col-6 col-sm-4 d-flex align-items-center">
+          <button type="submit" class="btn btn-primary btn-block">
+            查 询
+          </button>
+        </div>
+      </form>
+      <form class="row" hidden>
+        <div class="form-group col-6 col-sm-8">
+          <label for="keywords">关键词</label>
+          <input class="form-control" type="search" id="keywords" />
+        </div>
+        <div class="form-group col-6 col-sm-4 d-flex align-items-center">
+          <button type="submit" class="btn btn-warning btn-block">过滤</button>
+        </div>
+      </form>
+      <div class="row" id="results"></div>
+      <template>
+        <div class="mb-3 col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5
+                class="card-title d-flex justify-content-between align-items-center"
+              >
+                <a
+                  target="_blank"
+                  href="https://www.bing.com/search?q=${college}"
+                >
+                  ${college}
+                </a>
+                <span class="badge badge-success">${batch}</span>
+              </h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                <a
+                  target="_blank"
+                  href="https://www.bing.com/search?q=${major}"
+                >
+                  ${major}
+                </a>
+              </h6>
+              <div class="d-flex justify-content-between">
+                <div>预测${dimension}：<em>${score}</em></div>
+                <div class="${percent === 50 ? 'd-none' : 'd-block'}">
+                  ${percent}%概率过线：<em>${position}</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </main>
+    <script src="index.ts"></script>
+  </body>
+</html>

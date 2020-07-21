@@ -1,6 +1,6 @@
 import { parseDOM, SelectField, createRenderer } from "./components";
-import { province, division, searchBy } from "./meta.json";
-import { Major, ping, baseURL } from "./config";
+import { province, division, searchBy } from "../data/meta.json";
+import { Major, ping, baseURL } from "../data/config";
 /**
  * 渲染表单项
  */
@@ -53,10 +53,11 @@ document.querySelector<HTMLSelectElement>("#search_by").onchange = ({
     value
   ].slice(1);
 
+  filterForm.hidden = true;
   resultBox.innerHTML = "";
 };
 /**
- * 查询、渲染表格
+ * 查询、渲染数据
  */
 const ResultCard = createRenderer<Major>(
   resultBox.nextElementSibling.innerHTML
@@ -106,8 +107,10 @@ queryForm.onsubmit = async (event) => {
   button.disabled = filterForm.hidden = false;
 };
 /**
- * 筛选表格
+ * 筛选数据
  */
+const inAttr = /^[^<]*>/;
+
 filterForm.onsubmit = (event) => {
   event.preventDefault();
 
@@ -122,26 +125,10 @@ filterForm.onsubmit = (event) => {
     .filter(({ college, major }) => keywords.test(`${college} ${major}`))
     .map((item) =>
       ResultCard(item).replace(keywords, (match, offset: number, raw: string) =>
-        raw[offset - 1].trim()
+        inAttr.test(raw.slice(offset))
           ? match
           : `<span class="text-danger">${match}</span>`
       )
     )
     .join("");
 };
-/**
- * 打开捐款弹框
- */
-document
-  .querySelector("#tip")
-  .addEventListener("click", () =>
-    document.querySelector("dialog").showModal()
-  );
-/**
- * 访问统计
- */
-// ping();
-/**
- * 加载 PWA 后台线程
- */
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.ts");

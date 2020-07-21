@@ -24,7 +24,7 @@ dialog::backdrop {
 }
 
 #results:empty {
-  text-align: center;
+  justify-content: center;
   padding: 1rem;
 }
 #results:empty::before {

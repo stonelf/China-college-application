@@ -12,198 +12,78 @@
     <link rel="manifest" href="index.webmanifest" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/dialog-polyfill@0.5.1/dist/dialog-polyfill.css"
-    />
-    <link
-      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
     />
-    <link rel="stylesheet" href="index.css" />
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=Object.fromEntries"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dialog-polyfill@0.5.1/dist/dialog-polyfill.js"></script>
+    <style>
+      .navbar-brand img {
+        width: 3rem;
+      }
+      iframe {
+        height: calc(100vh - 4.625rem);
+      }
+    </style>
+    <script src="frame.ts"></script>
   </head>
-  <body class="bg-light pb-5">
-    <template id="select-field">
-      <div class="form-group ${className}">
-        <label for="${id}">${label}</label>
-        <select class="form-control" id="${id}" name="${name}">
-          ${children}
-        </select>
-      </div>
-    </template>
-
-    <main class="container">
-      <h1 class="my-3 text-center">
-        填教授™ - 2020年高考志愿辅助填选
-      </h1>
-      <form class="row">
-        <div class="form-group col-6 col-sm-4">
-          <label for="score">分数</label>
-          <input
-            type="number"
-            class="form-control"
-            id="score"
-            name="score"
-            required
-            min="0"
-            autofocus
-          />
-        </div>
-        <div class="form-group col-6 col-sm-4">
-          <label for="percent">上线概率</label>
-          <select class="form-control" id="percent" name="percent">
-            <optgroup label="比较有挑战">
-              <option value="5">5%</option>
-              <option value="10">10%</option>
-              <option value="15">15%</option>
-              <option value="20">20%</option>
-              <option value="25">25%</option>
-              <option value="30">30%</option>
-              <option value="35">35%</option>
-            </optgroup>
-            <optgroup label="风险中等">
-              <option value="40">40%</option>
-              <option value="45">45%</option>
-              <option value="50" selected>50%(预测值)</option>
-              <option value="55">55%</option>
-              <option value="60">60%</option>
-            </optgroup>
-            <optgroup label="相对保险">
-              <option value="65">65%</option>
-              <option value="70">70%</option>
-              <option value="75">75%</option>
-              <option value="80">80%</option>
-              <option value="85">85%</option>
-              <option value="90">90%</option>
-              <option value="95">95%</option>
-            </optgroup>
-            <optgroup label="概率越大表示越有把握"></optgroup>
-          </select>
-        </div>
-        <div class="form-group col-6 col-sm-4 d-flex align-items-center">
-          <button type="submit" class="btn btn-primary btn-block">
-            查 询
-          </button>
-        </div>
-      </form>
-      <form class="row" hidden>
-        <div class="form-group col-6 col-sm-8">
-          <label for="keywords">关键词</label>
-          <input class="form-control" type="search" id="keywords" />
-        </div>
-        <div class="form-group col-6 col-sm-4 d-flex align-items-center">
-          <button type="submit" class="btn btn-warning btn-block">过滤</button>
-        </div>
-      </form>
-      <div class="row" id="results"></div>
-      <template>
-        <div class="mb-3 col-md-4">
-          <div class="card">
-            <div class="card-body">
-              <h5
-                class="card-title d-flex justify-content-between align-items-center"
+  <body class="overflow-hidden">
+    <nav class="navbar navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href=".">
+          <img src="images/logo.png" />
+          填教授™
+        </a>
+        <button
+          class="navbar-toggler"
+          aria-controls="topNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="topNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" target="main" href="pages/query.html">
+                查询
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="main" href="pages/manual.html">
+                使用说明
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="main" href="pages/intention.html">
+                项目初衷
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                target="main"
+                href="https://wj.qq.com/s2/6684051/a204/"
               >
-                <a
-                  target="_blank"
-                  href="https://www.bing.com/search?q=${college}"
-                >
-                  ${college}
-                </a>
-                <span class="badge badge-success">${batch}</span>
-              </h5>
-              <h6 class="card-subtitle mb-2 text-muted">
-                <a
-                  target="_blank"
-                  href="https://www.bing.com/search?q=${major}"
-                >
-                  ${major}
-                </a>
-              </h6>
-              <div class="d-flex justify-content-between">
-                <div>预测${dimension}：<em>${score}</em></div>
-                <div class="${percent === 50 ? 'd-none' : 'd-block'}">
-                  ${percent}%概率过线：<em>${position}</em>
-                </div>
-              </div>
-            </div>
-          </div>
+                意见反馈
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="main" href="pages/donation.html">
+                公益捐助
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript: ;">
+                访问量：<span id="pageView"></span>
+              </a>
+            </li>
+          </ul>
         </div>
-      </template>
-
-      <h2>关于填教授™</h2>
-      <ul>
-        <li>填教授™是一个免费作品，是一个辅助高考考生填写志愿的免费服务</li>
-        <li>
-          每年全国有超过2500个高校、超过1500个专业在高考中招生，历年招生数据浩如烟海，全面了解这些招生信息对于任何一个考生和家长来讲都难以达成，因此获取到最正确最有参考价值信息的考生，会在分数之外获得额外的竞争优势，进而影响一生，而更多未能获得有效信息的考生，则可能错失了一个关键的发展机会。
-        </li>
-        <li>
-          我们观察到目前市面上的高考服务产品普遍价格畸高，而免费的信息服务又大部分只能和前一年的历史数据做简单对比，没有考虑到每个院校每个专业历年录取分数和位次到波动性，无法对新一年的录取分数做有效的估算。
-        </li>
-        <li>
-          我们认为影响了社会公平的信息洼地应该被良好的信息服务填平，所有人应该便捷的获得有效的数据和平等的发展机会。因此我们基于历年各高校录取情况的公开信息和统计学，开发了填教授来帮助考生筛选学校和专业
-        </li>
-        <li>
-          预测录取分数线的依据全部来自于往年各高校录取情况的公开信息。依据概率学进行预测。
-        </li>
-        <li>
-          由于统计偏差不可避免，填教授只为提供信息辅助考生进行选择，不对预测结果承担任何责任。
-        </li>
-      </ul>
-      <h2>使用说明</h2>
-      <ol>
-        <li>
-          选择考生所在省份，分科后，填入高考成绩后，点击查询按钮即可查询到根据往年录取情况有可能考上的学校和专业
-        </li>
-        <li>
-          可以下拉选择不同的上线概率后重新查询，来筛选相对保险(高概率、保底)的专业和相对有挑战(低概率)的专业，
-        </li>
-        <li>对于公布位次的省份，可以选择按照位次来查询筛选专业</li>
-        <li>
-          筛选后页面出现过滤按钮，可以输入感兴趣的学校和专业关键字在结果中进行进一步的筛选。
-        </li>
-        <li>
-          每年招生情况都会发生变化，因此考生在查询后仍需要通过其他途径进一步了解相关专业当年的招生信息
-        </li>
-        <li>
-          搬砖不易，请程序员喝杯咖啡的考生除了增加人品值，可能会获得更多隐藏功能。
-        </li>
-      </ol>
-    </main>
-
-    <footer
-      class="fixed-bottom p-3 bg-light d-flex justify-content-between align-items-center"
-    >
-      <small class="d-none d-sm-block">©2020 https://professortian.net</small>
-      <a href="https://wj.qq.com/s2/6684051/a204/">
-        意见/建议/缺陷反馈点这里
-      </a>
-      <div class="d-none d-sm-block" id="pageView"></div>
-      <div id="tip">&#9749; 搬砖不易，请程序员喝杯咖啡吧</div>
-    </footer>
-
-    <dialog>
-      <form method="dialog" class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">请程序员喝杯咖啡</h5>
-            <button type="submit" class="close" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body text-center">
-            <img src="images/wechat.jpg" />
-            <img src="images/alipay.jpg" />
-          </div>
-        </div>
-      </form>
-    </dialog>
-
+      </div>
+    </nav>
+    <iframe class="w-100 border-0" name="main" src="pages/query.html"></iframe>
     <script>
       function pvcb(number) {
         document.querySelector("#pageView").textContent = number;
       }
     </script>
-    <script src="index.ts"></script>
   </body>
 </html>
