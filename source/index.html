@@ -18,11 +18,14 @@
       .navbar-brand img {
         width: 3rem;
       }
+      [tabindex="-1"] {
+        outline: none;
+      }
       iframe {
         height: calc(100vh - 4.625rem);
       }
     </style>
-    <script src="frame.ts"></script>
+    <script src="index.ts"></script>
   </head>
   <body class="overflow-hidden">
     <nav class="navbar navbar-light bg-light">
@@ -39,7 +42,7 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="topNav">
+        <div class="collapse navbar-collapse" tabindex="-1" id="topNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
               <a class="nav-link" target="main" href="pages/query.html">

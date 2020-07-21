@@ -5,8 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
     ".navbar-collapse"
   );
 
-  document.querySelector<HTMLButtonElement>(".navbar-toggler").onclick = () =>
+  document.querySelector<HTMLButtonElement>(".navbar-toggler").onclick = () => {
     navbarCollapse.classList.toggle("show");
+    navbarCollapse.focus();
+  };
+  navbarCollapse.onblur = () =>
+    setTimeout(() => navbarCollapse.classList.remove("show"));
 
   navbarCollapse.onclick = (event) => {
     const item = (event.target as HTMLElement).closest(".nav-item");
@@ -15,16 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     navbarCollapse.querySelector(".nav-item.active").classList.remove("active");
     item.classList.add("active");
-
-    navbarCollapse.classList.remove("show");
   };
-
-  document.body.onclick = ({ target }) => {
-    if (!(target as Element).matches(`.navbar *`))
-      navbarCollapse.classList.remove("show");
-  };
-  (window.frames[0].frameElement as HTMLIFrameElement).onload = () =>
-    (window.frames[0].onclick = document.body.onclick);
 
   // ping();
 });
