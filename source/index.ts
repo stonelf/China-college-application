@@ -1,146 +1,28 @@
-import { parseDOM, SelectField, createRenderer } from "./components";
-import { province, division, searchBy } from "./meta.json";
-import { Major, ping, baseURL } from "./config";
-/**
- * 渲染表单项
- */
-const { 0: queryForm, 1: filterForm } = document.forms;
+import { ping } from "./data/config";
 
-queryForm.prepend(
-  parseDOM(`
-    ${SelectField({
-      className: "col-6 col-sm-4",
-      id: "province",
-      name: "province",
-      label: "省份",
-      children: province
-        .map((name, index) => `<option value="${index}">${name}</option>`)
-        .join(""),
-    })}
-
-    ${SelectField({
-      className: "col-6 col-sm-4",
-      id: "division",
-      name: "division",
-      label: "分科",
-      children: division
-        .map((text, index) => `<option value="${index}">${text}</option>`)
-        .join(""),
-    })}
-
-    ${SelectField({
-      className: "col-6 col-sm-4",
-      id: "search_by",
-      name: "search_by",
-      label: "查询方式",
-      children: Object.entries(searchBy)
-        .map(([value, name]) => `<option value="${value}">${name}</option>`)
-        .join(""),
-    })}
-`)
-);
-/**
- * 分数、位次切换
- */
-const resultBox = document.querySelector("#results");
-
-document.querySelector<HTMLSelectElement>("#search_by").onchange = ({
-  target,
-}) => {
-  const { value } = target as HTMLSelectElement;
-
-  document.querySelector('label[for="score"]').textContent = searchBy[
-    value
-  ].slice(1);
-
-  resultBox.innerHTML = "";
-};
-/**
- * 查询、渲染表格
- */
-const ResultCard = createRenderer<Major>(
-  resultBox.nextElementSibling.innerHTML
-);
-
-var data: Major[] = [];
-
-function renderAll() {
-  resultBox.innerHTML = data.map(ResultCard).join("");
-}
-
-queryForm.onsubmit = async (event) => {
-  event.preventDefault();
-
-  const { province, division, percent, score, search_by } = Object.fromEntries(
-      Array.from(queryForm.elements, ({ name, value }: HTMLInputElement) => [
-        name,
-        value,
-      ])
-    ),
-    button = queryForm.querySelector("button");
-
-  const path = [province, division, percent, score, search_by, "data.js"].join(
-    "/"
+document.addEventListener("DOMContentLoaded", () => {
+  const navbarCollapse = document.querySelector<HTMLDivElement>(
+    ".navbar-collapse"
   );
-  // ping(path);
 
-  button.disabled = true;
+  document.querySelector<HTMLButtonElement>(".navbar-toggler").onclick = () => {
+    navbarCollapse.classList.toggle("show");
+    navbarCollapse.focus();
+  };
+  navbarCollapse.onblur = () =>
+    setTimeout(() => navbarCollapse.classList.remove("show"));
 
-  const response = await fetch(new URL(path, baseURL) + "");
+  navbarCollapse.onclick = (event) => {
+    const item = (event.target as HTMLElement).closest(".nav-item");
 
-  const list: Major[] = await response.json(),
-    scoreKey: string = search_by + percent;
+    if (!item || !item.querySelector("a").href.startsWith("http")) return;
 
-  const two_columns = +percent !== 50;
+    navbarCollapse.querySelector(".nav-item.active").classList.remove("active");
+    item.classList.add("active");
+  };
 
-  data = list.map(({ [scoreKey]: score, s50, p50, ...rest }) => ({
-    score: two_columns ? s50 || p50 : score,
-    position: two_columns ? score : "",
-    dimension: searchBy[search_by].slice(1),
-    percent: +percent,
-    ...rest,
-  })) as Major[];
-
-  renderAll();
-
-  button.disabled = filterForm.hidden = false;
-};
-/**
- * 筛选表格
- */
-filterForm.onsubmit = (event) => {
-  event.preventDefault();
-
-  const { value } = (event.target as HTMLFormElement)
-    .elements[0] as HTMLInputElement;
-
-  if (!value.trim()) return renderAll();
-
-  const keywords = new RegExp(value.replace(/\s+/g, "|"), "g");
-
-  resultBox.innerHTML = data
-    .filter(({ college, major }) => keywords.test(`${college} ${major}`))
-    .map((item) =>
-      ResultCard(item).replace(keywords, (match, offset: number, raw: string) =>
-        raw[offset - 1].trim()
-          ? match
-          : `<span class="text-danger">${match}</span>`
-      )
-    )
-    .join("");
-};
-/**
- * 打开捐款弹框
- */
-document
-  .querySelector("#tip")
-  .addEventListener("click", () =>
-    document.querySelector("dialog").showModal()
-  );
-/**
- * 访问统计
- */
-// ping();
+  // ping();
+});
 /**
  * 加载 PWA 后台线程
  */
