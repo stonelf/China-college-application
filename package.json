@@ -27,7 +27,7 @@
   "scripts": {
     "test": "lint-staged",
     "start": "workbox generateSW  &&  parcel source/index.html --open",
-    "pack-dist": "parcel build source/index.html --public-url .",
+    "pack-dist": "parcel build source/index.html",
     "pack-sw": "rm -f dist/sw.js.map  &&  workbox generateSW",
     "build": "rm -rf .cache/ dist/  &&  npm run pack-dist  &&  npm run pack-sw"
   },

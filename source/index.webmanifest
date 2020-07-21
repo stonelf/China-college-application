@@ -1,7 +1,7 @@
 {
   "name": "填教授",
   "short_name": "填教授",
-  "start_url": "https://freecodecamp-china.github.io/China-college-application/",
+  "start_url": "https://college-applier.fcc-cd.dev/",
   "description": "高考志愿填报助手",
   "scope": "/",
   "display": "standalone",
