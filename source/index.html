@@ -8,6 +8,7 @@
     />
     <title>填教授™ - 2020年高考志愿辅助填选</title>
     <!-- <base href="//cdn.sou.ac.cn/" /> -->
+    <link rel="icon" href="images/logo.png" />
     <link rel="manifest" href="index.webmanifest" />
     <link
       rel="stylesheet"
@@ -19,8 +20,7 @@
     />
     <link rel="stylesheet" href="index.css" />
 
-    <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.5/runtime.min.js"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=URL"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Object.fromEntries"></script>
     <script src="https://cdn.jsdelivr.net/npm/dialog-polyfill@0.5.1/dist/dialog-polyfill.js"></script>
   </head>
   <body class="bg-light pb-5">
@@ -38,7 +38,7 @@
         填教授™ - 2020年高考志愿辅助填选
       </h1>
       <form class="row">
-        <div class="form-group col-12 col-12 col-sm-6 col-md-4">
+        <div class="form-group col-6 col-sm-4">
           <label for="score">分数</label>
           <input
             type="number"
@@ -50,7 +50,7 @@
             autofocus
           />
         </div>
-        <div class="form-group col-12 col-12 col-sm-6 col-md-4">
+        <div class="form-group col-6 col-sm-4">
           <label for="percent">上线概率</label>
           <select class="form-control" id="percent" name="percent">
             <optgroup label="比较有挑战">
@@ -81,51 +81,55 @@
             <optgroup label="概率越大表示越有把握"></optgroup>
           </select>
         </div>
-        <div
-          class="form-group col-12 col-12 col-sm-6 col-md-4 d-flex align-items-center"
-        >
+        <div class="form-group col-6 col-sm-4 d-flex align-items-center">
           <button type="submit" class="btn btn-primary btn-block">
             查 询
           </button>
         </div>
       </form>
       <form class="row" hidden>
-        <div class="form-group col-12 col-12 col-sm-6 col-md-4">
+        <div class="form-group col-6 col-sm-8">
           <label for="keywords">关键词</label>
           <input class="form-control" type="search" id="keywords" />
         </div>
-        <div
-          class="form-group col-12 col-12 col-sm-6 col-md-4 d-flex align-items-center"
-        >
+        <div class="form-group col-6 col-sm-4 d-flex align-items-center">
           <button type="submit" class="btn btn-warning btn-block">过滤</button>
         </div>
       </form>
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>学校</th>
-              <th>专业</th>
-              <th>批次</th>
-              <th>分科</th>
-              <th>预测分数</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="majorList">
-            <template>
-              <tr>
-                <td>${college}</td>
-                <td>${major}</td>
-                <td>${batch}</td>
-                <td>${division}</td>
-                <td>${score}</td>
-                <td>${position}</td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
+      <div class="row" id="results"></div>
+      <template>
+        <div class="mb-3 col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5
+                class="card-title d-flex justify-content-between align-items-center"
+              >
+                <a
+                  target="_blank"
+                  href="https://www.bing.com/search?q=${college}"
+                >
+                  ${college}
+                </a>
+                <span class="badge badge-success">${batch}</span>
+              </h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                <a
+                  target="_blank"
+                  href="https://www.bing.com/search?q=${major}"
+                >
+                  ${major}
+                </a>
+              </h6>
+              <div class="d-flex justify-content-between">
+                <div>预测${dimension}：<em>${score}</em></div>
+                <div class="${percent === 50 ? 'd-none' : 'd-block'}">
+                  ${percent}%概率过线：<em>${position}</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
 
       <h2>关于填教授™</h2>
       <ul>

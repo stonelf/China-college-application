@@ -13,14 +13,14 @@ export interface Props {
   children?: string;
 }
 
-export interface FieldProps extends Props {
+export interface FieldProps {
   name?: string;
   defaultValue?: string;
 }
 
-export function createRenderer<T extends Props = Props>(template: string) {
+export function createRenderer<T = any>(template: string) {
   return new Function("props", `with (props) return \`${template}\`;`) as (
-    props: T
+    props: T & Props
   ) => string;
 }
 
