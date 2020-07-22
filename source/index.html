@@ -25,7 +25,12 @@
         height: calc(100vh - 4.625rem);
       }
     </style>
-    <script src="index.ts"></script>
+    <script async src="index.ts"></script>
+    <script>
+      function pvcb(number) {
+        document.querySelector("#pageView").textContent = number;
+      }
+    </script>
   </head>
   <body class="overflow-hidden">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -83,10 +88,5 @@
       </div>
     </nav>
     <iframe class="w-100 border-0" name="main" src="pages/query.html"></iframe>
-    <script>
-      function pvcb(number) {
-        document.querySelector("#pageView").textContent = number;
-      }
-    </script>
   </body>
 </html>
