@@ -27,9 +27,8 @@
     </style>
     <script async src="index.ts"></script>
     <script>
-      function pvcb(number) {
-        document.querySelector("#pageView").textContent = number;
-      }
+      self.pvcb = (number) =>
+        (document.querySelector("#pageView").textContent = number);
     </script>
   </head>
   <body class="overflow-hidden">
