@@ -42,16 +42,15 @@ queryForm.prepend(
 /**
  * 分数、位次切换
  */
-const resultBox = document.querySelector("#results");
+const resultBox = document.querySelector("body > main"),
+  scoreLabel = document.querySelector('label[for="score"]');
 
 document.querySelector<HTMLSelectElement>("#search_by").onchange = ({
   target,
 }) => {
   const { value } = target as HTMLSelectElement;
 
-  document.querySelector('label[for="score"]').textContent = searchBy[
-    value
-  ].slice(1);
+  scoreLabel.textContent = searchBy[value].slice(1);
 
   filterForm.hidden = true;
   resultBox.innerHTML = "";
@@ -83,7 +82,7 @@ queryForm.onsubmit = async (event) => {
   const path = [province, division, percent, score, search_by, "data.js"].join(
     "/"
   );
-  // ping(path);
+  ping(path);
 
   button.disabled = true;
 

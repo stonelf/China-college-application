@@ -18,6 +18,15 @@
 5.  每年招生情况都会发生变化，因此考生在查询后仍需要通过其他途径进一步了解相关专业当年的招生信息
 6.  搬砖不易，请程序员喝杯咖啡的考生除了增加人品值，可能会获得更多隐藏功能。
 
+## 本地开发
+
+```Shell
+git clone https://github.com/stonelf/China-college-application.git ~/Desktop/college-applier/
+cd ~/Desktop/college-applier/
+npm install
+npm start
+```
+
 ## 社区合作
 
 - [freeCodeCamp 中文社区](https://github.com/freeCodeCamp-China/activity/issues/11)

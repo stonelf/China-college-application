@@ -1,36 +1,11 @@
-th {
-  white-space: nowrap;
-}
-th,
-td {
-  vertical-align: middle;
-}
-th:empty,
-td:empty {
-  display: none;
-}
-
-dialog {
-  top: 0;
-  z-index: 1;
-  border: none;
-  background: transparent;
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-}
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-#results:empty {
+body > main:empty {
   justify-content: center;
   padding: 1rem;
 }
-#results:empty::before {
+body > main:empty::before {
   content: "暂无数据";
 }
-#results em {
+body > main em {
   font-style: normal;
   font-weight: bold;
   color: red;

@@ -4,6 +4,7 @@
     "module": "ES6",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "lib": ["ES2020", "DOM"]
+    "downlevelIteration": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"]
   }
 }

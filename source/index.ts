@@ -2,16 +2,30 @@ import { ping } from "./data/config";
 
 document.addEventListener("DOMContentLoaded", () => {
   const navbarCollapse = document.querySelector<HTMLDivElement>(
-    ".navbar-collapse"
-  );
+      ".navbar-collapse"
+    ),
+    navbarToggler = document.querySelector<HTMLButtonElement>(
+      ".navbar-toggler"
+    );
+  /**
+   * 导航栏外部开合
+   */
+  navbarToggler.onclick = () => {
+    const expanded = navbarCollapse.classList.contains("show");
 
-  document.querySelector<HTMLButtonElement>(".navbar-toggler").onclick = () => {
+    navbarToggler.setAttribute("aria-expanded", !expanded + "");
     navbarCollapse.classList.toggle("show");
-    navbarCollapse.focus();
+    if (!expanded) navbarCollapse.parentElement.focus();
   };
-  navbarCollapse.onblur = () =>
-    setTimeout(() => navbarCollapse.classList.remove("show"));
 
+  navbarCollapse.parentElement.onblur = () =>
+    setTimeout(() => {
+      navbarToggler.setAttribute("aria-expanded", "false");
+      navbarCollapse.classList.remove("show");
+    }, 300);
+  /**
+   * 导航项目点击切换
+   */
   navbarCollapse.onclick = (event) => {
     const item = (event.target as HTMLElement).closest(".nav-item");
 
@@ -20,8 +34,25 @@ document.addEventListener("DOMContentLoaded", () => {
     navbarCollapse.querySelector(".nav-item.active").classList.remove("active");
     item.classList.add("active");
   };
+  /**
+   * 导航项目加载切换
+   */
+  const navItems = document.querySelectorAll(".nav-item");
 
-  // ping();
+  document.querySelector("iframe").onload = () => {
+    try {
+      var { href } = window.frames[0].location;
+    } catch {
+      return;
+    }
+
+    for (const { firstElementChild: link, classList } of navItems)
+      classList.toggle("active", (link as HTMLAnchorElement).href === href);
+  };
+  /**
+   * 访问统计
+   */
+  ping();
 });
 /**
  * 加载 PWA 后台线程
