@@ -1,6 +1,8 @@
+import { documentReady, delegate } from "web-cell/source/utility/event";
+
 import { ping } from "./data/config";
 
-document.addEventListener("DOMContentLoaded", () => {
+documentReady.then(() => {
   const navbarCollapse = document.querySelector<HTMLDivElement>(
       ".navbar-collapse"
     ),
@@ -26,14 +28,17 @@ document.addEventListener("DOMContentLoaded", () => {
   /**
    * 导航项目点击切换
    */
-  navbarCollapse.onclick = (event) => {
-    const item = (event.target as HTMLElement).closest(".nav-item");
+  navbarCollapse.addEventListener(
+    "click",
+    delegate(".nav-item", (_, item) => {
+      if (!item.querySelector("a").href.startsWith("http")) return;
 
-    if (!item || !item.querySelector("a").href.startsWith("http")) return;
-
-    navbarCollapse.querySelector(".nav-item.active").classList.remove("active");
-    item.classList.add("active");
-  };
+      navbarCollapse
+        .querySelector(".nav-item.active")
+        .classList.remove("active");
+      item.classList.add("active");
+    })
+  );
   /**
    * 导航项目加载切换
    */

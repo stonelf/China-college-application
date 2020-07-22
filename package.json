@@ -14,6 +14,9 @@
     "shiy2008@gmail.com"
   ],
   "main": "source/index.html",
+  "dependencies": {
+    "web-cell": "^2.1.2"
+  },
   "devDependencies": {
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
