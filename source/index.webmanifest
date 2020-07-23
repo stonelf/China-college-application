@@ -1,7 +1,7 @@
 {
   "name": "填教授",
   "short_name": "填教授",
-  "start_url": "https://professortian.net/",
+  "start_url": "/",
   "description": "高考志愿填报助手",
   "scope": "/",
   "display": "standalone",
