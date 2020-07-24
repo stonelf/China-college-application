@@ -32,10 +32,14 @@ documentReady.then(() => {
     "click",
     delegate(".nav-item", (_, item) => {
       if (!item.querySelector("a").href.startsWith("http")) return;
-
-      navbarCollapse
-        .querySelector(".nav-item.active")
-        .classList.remove("active");
+      
+      try {
+        navbarCollapse
+          .querySelector(".nav-item.active")
+          .classList.remove("active");
+      } catch {
+        return; 
+      }
       item.classList.add("active");
     })
   );
