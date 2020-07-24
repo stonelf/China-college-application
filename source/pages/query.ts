@@ -43,17 +43,42 @@ queryForm.prepend(
  * 分数、位次切换
  */
 const resultBox = document.querySelector("body > main"),
-  scoreLabel = document.querySelector('label[for="score"]');
+  scoreInput = document.querySelector<HTMLInputElement>("#score"),
+  positionInput = document.querySelector<HTMLInputElement>("#position");
+
+function switchMode(type: string) {
+  if (type === "s") {
+    scoreInput.disabled = scoreInput.parentElement.hidden = false;
+    positionInput.disabled = positionInput.parentElement.hidden = true;
+  } else {
+    scoreInput.disabled = scoreInput.parentElement.hidden = true;
+    positionInput.disabled = positionInput.parentElement.hidden = false;
+  }
+  filterForm.hidden = true;
+  resultBox.innerHTML = "";
+}
 
 document.querySelector<HTMLSelectElement>("#search_by").onchange = ({
   target,
-}) => {
-  const { value } = target as HTMLSelectElement;
+}) => switchMode((target as HTMLSelectElement).value);
+/**
+ * 输入缓存
+ */
+for (const input of queryForm.elements) {
+  const { name } = input as HTMLInputElement;
+  const value = self.localStorage[name];
 
-  scoreLabel.textContent = searchBy[value].slice(1);
+  if (!value) continue;
 
-  filterForm.hidden = true;
-  resultBox.innerHTML = "";
+  (input as HTMLInputElement).value = value;
+
+  if (name === "search_by") switchMode(value);
+}
+
+queryForm.onchange = ({ target }) => {
+  const { name, value } = target as HTMLInputElement;
+
+  self.localStorage[name] = value;
 };
 /**
  * 查询、渲染数据
@@ -71,17 +96,33 @@ function renderAll() {
 queryForm.onsubmit = async (event) => {
   event.preventDefault();
 
-  const { province, division, percent, score, search_by } = Object.fromEntries(
-      Array.from(queryForm.elements, ({ name, value }: HTMLInputElement) => [
-        name,
-        value,
-      ])
+  const {
+      province,
+      division,
+      percent,
+      score,
+      position,
+      search_by,
+    } = Object.fromEntries(
+      Array.from(
+        queryForm.elements,
+        ({ name, disabled, value }: HTMLInputElement) => [
+          name,
+          !disabled && value,
+        ]
+      )
     ),
     button = queryForm.querySelector("button");
 
-  const path = [province, division, percent, score, search_by, "data.js"].join(
-    "/"
-  );
+  const path = [
+    province,
+    division,
+    percent,
+    score || position,
+    search_by,
+    self.localStorage.moreData == 1 ? "list.js" : "data.js",
+  ].join("/");
+
   ping(path);
 
   button.disabled = true;
@@ -93,17 +134,25 @@ queryForm.onsubmit = async (event) => {
 
   const two_columns = +percent !== 50;
 
-  data = list.map(({ [scoreKey]: score, s50, p50, ...rest }) => ({
-    score: two_columns ? s50 || p50 : score,
-    position: two_columns ? score : "",
-    dimension: searchBy[search_by].slice(1),
-    percent: +percent,
-    ...rest,
-  })) as Major[];
+  data = list
+    .map(
+      ({ [scoreKey]: score, s50, p50, ...rest }) =>
+        ({
+          score: two_columns ? s50 || p50 : score,
+          position: two_columns ? score : "",
+          dimension: searchBy[search_by].slice(1),
+          percent: +percent,
+          ...rest,
+        } as Major)
+    )
+    .sort(({ position: A, score: C }, { position: B, score: D }) =>
+      search_by === "s" ? B - A || D - C : A - B || C - D
+    );
 
   renderAll();
 
   button.disabled = filterForm.hidden = false;
+  (filterForm.elements[0] as HTMLInputElement).value = "";
 };
 /**
  * 筛选数据

@@ -34,6 +34,18 @@
           autofocus
         />
       </div>
+      <div class="form-group col-6 col-sm-4" hidden>
+        <label for="position">位次</label>
+        <input
+          type="number"
+          class="form-control"
+          id="position"
+          name="position"
+          required
+          min="0"
+          disabled
+        />
+      </div>
       <div class="form-group col-6 col-sm-4">
         <label for="percent">上线概率</label>
         <select class="form-control" id="percent" name="percent">
@@ -112,7 +124,7 @@
         </div>
       </div>
     </template>
-    <footer class="text-center">
+    <footer class="p-3 text-center">
       <a class="btn btn-success" href="manual.html">
         使用说明
       </a>
