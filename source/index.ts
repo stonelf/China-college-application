@@ -55,6 +55,20 @@ documentReady.then(() => {
       classList.toggle("active", (link as HTMLAnchorElement).href === href);
   };
   /**
+   * 打开系统分享功能
+   */
+  document
+    .querySelector<HTMLButtonElement>("button.share-button")
+    .addEventListener("click", () =>
+      navigator.share({
+        url: self.location.href,
+        title: document.title,
+        text: document.querySelector<HTMLMetaElement>(
+          'meta[name="description"]'
+        ).content,
+      })
+    );
+  /**
    * 访问统计
    */
   ping();

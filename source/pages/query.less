@@ -1,0 +1,14 @@
+body > main {
+  &:empty {
+    justify-content: center;
+    padding: 1rem;
+    &::before {
+      content: "暂无数据";
+    }
+  }
+  em {
+    font-style: normal;
+    font-weight: bold;
+    color: red;
+  }
+}

@@ -1,0 +1,41 @@
+.navbar-brand img {
+    width: 3rem;
+}
+[tabindex="-1"] {
+    outline: none;
+}
+iframe {
+    height: calc(100vh - 7.75rem);
+}
+
+.share-button {
+    display: block;
+    text-decoration: none !important;
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 0.25rem;
+    position: relative;
+    & > span {
+        width: 2rem;
+        height: 2rem;
+    }
+    .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        color: white;
+    }
+    & > img {
+        border: 1px solid lightgray;
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &:hover > img {
+        display: block;
+    }
+}
